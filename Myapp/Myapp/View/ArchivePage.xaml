@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Myapp.View.ArchivePage" Padding="0,20,0,0">
+    <AbsoluteLayout>
+        <Button Text="Archiver" BackgroundColor="GreenYellow" TextColor="White"
+                AbsoluteLayout.LayoutBounds="0,1,1,75" AbsoluteLayout.LayoutFlags="PositionProportional,WidthProportional"/>
+    </AbsoluteLayout>
+</ContentPage>

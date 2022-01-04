@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:Myapp.View"
+            x:Class="Myapp.View.AccueilTabbedPage"
+            
+    BarBackgroundColor="GreenYellow"  SelectedTabColor="WhiteSmoke"  >
+    
+    
+    <TabbedPage.Children>
+        
+        <local:BackupPage Title="Sauvegarde" IconImageSource="games"/>
+        <local:ArchivePage Title="Archivage" IconImageSource="camera"/>
+        <local:CloudPage Title="Cloud" IconImageSource="camera"/>
+        
+
+    </TabbedPage.Children>
+</TabbedPage>

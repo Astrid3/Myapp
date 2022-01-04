@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:local="clr-namespace:Myapp.View"    
+             IsPresented="False"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Myapp.View.MainMasterDetailPage">
+    
+    <MasterDetailPage.Master  >
+       
+        <ContentPage Title="oui" BackgroundColor="GreenYellow">
+            
+            <StackLayout  >
+                <RelativeLayout Margin="25,10,25,0" Padding="0,0,0,0" HeightRequest="0" >
+                    <BoxView Color="GreenYellow"
+                             RelativeLayout.WidthConstraint="{ConstraintExpression
+                        Type=RelativeToParent,Property=Width,Factor=1}"
+                             RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent,Property=Height
+                        ,Factor=0}"/>
+                    <Image  Margin="10" BackgroundColor="Accent" Aspect="AspectFill" Source="Enrich.png"></Image>
+                </RelativeLayout>
+                <ListView x:Name="navigationDrawerList"  
+                  RowHeight="60"  
+                  SeparatorVisibility="Default"  
+                  ItemSelected="OnMenuSelected"  
+                  BackgroundColor="White">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout VerticalOptions="FillAndExpand"  
+                                 Orientation="Horizontal"  
+                                 Padding="20,10,0,10"  
+                                 Spacing="20">
+
+                                    <Image Source="{Binding Icon}"  
+                                     WidthRequest="30"  
+                                     HeightRequest="30"  
+                                     VerticalOptions="Center" />
+                                    <Label Text="{Binding Title}"  
+                                     FontSize="Medium"  
+                                     VerticalOptions="Center"  
+                                     TextColor="Black"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </ContentPage>
+    </MasterDetailPage.Master>
+
+    <MasterDetailPage.Detail >
+        <NavigationPage >
+            <x:Arguments>
+                <local:AccueilTabbedPage/>
+               
+            </x:Arguments>
+        </NavigationPage>
+        
+    </MasterDetailPage.Detail>
+</MasterDetailPage>
