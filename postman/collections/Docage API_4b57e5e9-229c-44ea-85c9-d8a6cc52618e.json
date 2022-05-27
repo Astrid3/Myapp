@@ -1,0 +1,2349 @@
+{
+	"info": {
+		"_postman_id": "f0a6ae20-6dab-48f2-94e5-880e6e580110",
+		"name": "Docage API",
+		"description": "Dans cette documentation nous allons voir les cas d'utilisation les plus communs pour vous permettre d'intégrer la signature électronique de Docage à votre propre produit.\n\nEn complément de cette documentation, vous pouvez également aller visiter notre page [Swagger](https://api.docage.com/swagger) pour découvrir toutes les entités et les routes de notre API.\n\n#### **Prérequis**\n\nLa plupart des routes de l'API nécessitent une authentification. Pour rajouter une authentification à votre requête vous devez posséder un compte Docage, que vous pouvez tester gratuitement [ici](https://api.docage.com/Identity/Account/Register). Votre compte sera créé en mode démo, les comptes dans ce mode n'ont pas de date d'expiration et vous sera utile pour tester Docage ainsi que votre intégration de Docage de manière gratuite.\n\nUne fois votre compte créé accédez à votre profile utilisateur et sélectionnez l'onglet \"Clé d'API\" et cliquez sur le bouton de génération de votre clé d'API. Cette clé servira à vous authentifier à notre API, ce qui permettra d'accéder à toutes les données qui vous appartiennent sur notre application, pour cette raison, veuillez garder cette clé de manière personnelle et ne la partagez pas.\n\nNous utilisons [Basic Authentication](https://en.wikipedia.org/wiki/Basic_access_authentication) pour nous authentifier à l'API lors d'appel à celle-ci. Vous devez donc renseigner le **username** qui correspond à votre email d'utilisateur Docage et le **password** qui correspond à votre clé API, séparé par le caractère `:`.\n\nExemple de ce à quoi votre header Authorization doit ressembler: `Basic userEmail:APIkey`\n\n#### **Notes**\n- Si vous souhaitez tester notre API sans écrire de ligne de code dans un premier temps, vous pouvez utiliser [Postman](https://www.postman.com) (ou une application similaire) pour vous familiariser avec les informations que vous envoyez/recevez.\n- Les DateTime doivent être en format ISO 8601, par exemple \"2012-04-23T18:25:43.511Z\"",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Requêtes communes",
+			"item": [
+				{
+					"name": "Récupérer une liste d'entités",
+					"item": [
+						{
+							"name": "Récupérer une liste filtrée",
+							"item": [
+								{
+									"name": "Filtrer les transactions en cours",
+									"id": "336c49b7-c050-4a5c-8ea7-e7412dc95029",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Filter\": {\r\n        \"OperatorType\": null,\r\n        \"Operands\": null,\r\n        \"PropertyName\": \"Status\",\r\n        \"Value\": \"2\",\r\n        \"Comparison\": \"=\"\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/Transactions",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"Transactions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Filtrer les transactions supérieure à une date",
+									"id": "e4e958c3-2eed-4014-ad45-227ff93238e6",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Filter\": {\r\n        \"OperatorType\": null,\r\n        \"Operands\": null,\r\n        \"PropertyName\": \"CreationDate\",\r\n        \"Value\": \"2021-09-10T18:00:00.000Z\",\r\n        \"Comparison\": \">\"\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/Transactions",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"Transactions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Filtrer les transactions signées ET dont le nom contient \"Facture\"",
+									"id": "1c8bce14-1f02-4cea-9044-da1abd612ddf",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Filter\": {\r\n        \"OperatorType\": \"and\",\r\n        \"Operands\": [\r\n            {\r\n                \"OperatorType\": null,\r\n                \"Operands\": null,\r\n                \"PropertyName\": \"Name\",\r\n                \"Value\": \"facture\",\r\n                \"Comparison\": \"contains\"\r\n            },\r\n            {\r\n                \"OperatorType\": null,\r\n                \"Operands\": null,\r\n                \"PropertyName\": \"Status\",\r\n                \"Value\": \"5\",\r\n                \"Comparison\": \"=\"\r\n            }\r\n        ],\r\n        \"PropertyName\": null,\r\n        \"Value\": null,\r\n        \"Comparison\": null\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/Transactions",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"Transactions"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Filtrer les contacts qui s'appellent Léo ou Paul ET dont l'email se termine par gmail.com",
+									"id": "27fc93d9-a349-496f-b84b-53d504a3274c",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"method": "GET",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"Filter\": {\r\n        \"OperatorType\": \"and\",\r\n        \"Operands\": [\r\n            {\r\n                \"OperatorType\": \"or\",\r\n                \"Operands\": [\r\n                    {\r\n                        \"OperatorType\": null,\r\n                        \"Operands\": null,\r\n                        \"PropertyName\": \"FirstName\",\r\n                        \"Value\": \"Léo\",\r\n                        \"Comparison\": \"=\"\r\n                    },\r\n                    {\r\n                        \"OperatorType\": null,\r\n                        \"Operands\": null,\r\n                        \"PropertyName\": \"FirstName\",\r\n                        \"Value\": \"Paul\",\r\n                        \"Comparison\": \"=\"\r\n                    }\r\n                ],\r\n                \"PropertyName\": null,\r\n                \"Value\": null,\r\n                \"Comparison\": null\r\n            },\r\n            {\r\n                \"OperatorType\": null,\r\n                \"Operands\": null,\r\n                \"PropertyName\": \"Email\",\r\n                \"Value\": \"gmail.com\",\r\n                \"Comparison\": \"endswith\"\r\n            }\r\n        ],\r\n        \"PropertyName\": null,\r\n        \"Value\": null,\r\n        \"Comparison\": null\r\n    }\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/Contacts",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"Contacts"
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"id": "634af250-769c-40a8-ab62-29d3cbf01259",
+							"description": "Vous pouvez filtrer la plupart de vos requêtes comme GET /Transactions ou GET /Contacts pour récupérer uniquement les données que vous voulez ou pour effectuer une recherche. Cela améliore la rapidité de vos requêtes. Pour ajouter un filtre à votre requête GET il faut l'ajouter au corps comme indiqué ci-dessous :\n\n```\n{\n    \"Filter\": {\n        \"OperatorType\": null,\n        \"Operands\": [\n            {\n                \"OperatorType\": null,\n                \"Operands\": [],\n                \"PropertyName\": null,\n                \"Value\": null,\n                \"Comparison\": null\n            }\n        ],\n        \"PropertyName\": null,\n        \"Value\": null,\n        \"Comparison\": null\n    }\n}\n```\n\n**OperatorType**: \"**and**\" or \"**or**\"\n\n**Operands** : conditions à respecter\n\n**PropertyName** : toute propriété d'un objet Docage, par exemple  \"FirstName\" pour un Contact\n\n**Value** : la valeur à comparer\n\n**Comparison** : type de comparaison\n\n| Comparison | Description |\n|:---:|-------------|\n| = | la propriété doit être égale à la valeur |\n| <> | la propriété doit être différente à la valeur |\n| > | la propriété doit être supérieure à la valeur |\n| >= | la propriété doit être supérieure ou égale à la valeur |\n| < | la propriété doit être inférieure à la valeur |\n| <= | la propriété doit être inférieure ou égale à la valeur |\n| contains | (string uniquement) la propriété doit contenir la valeur |\n| notcontains | (string uniquement) la propriété ne doit pas contenir la valeur |\n| startswith | (string uniquement) la propriété doit commencer par la valeur |\n| endswith | (string uniquement) la propriété doit terminer par la valeur |\n\n**Note:** Toutes les comparaisons de string sont insensibles à la casse."
+						},
+						{
+							"name": "Récupérer une liste d'entités",
+							"id": "466bfcd6-18e4-4eaa-96c6-596e2adfc170",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "UserName",
+										"value": "sr@intuiteo.com",
+										"type": "text",
+										"disabled": true
+									},
+									{
+										"key": "APIKey",
+										"value": "b6d50cdd-e38c-41be-8bb1-0253ea956c60",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/Contacts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Contacts"
+									],
+									"query": [
+										{
+											"key": "UserName",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "APIKey",
+											"value": "",
+											"type": "text",
+											"disabled": true
+										}
+									]
+								},
+								"description": "Retourne tous vos contacts. Vous pouvez choisir d'utiliser une pagination pour votre résultat, permettant ainsi un retour de l'API plus rapide, donc une amélioration des performances. Pour cela vous devez ajouter deux paramètres à votre URL, ***skip*** pour préciser quelle page vous souhaitez requêter et ***take*** pour préciser le nombre d'objets récupérés dans chaque page.\n\nExemple: `/Contacts?skip=0&take=10`\n\nEn plus de la pagination, vous avez aussi la possibilité d'ordonner vos résultats avec le paramètre ***sortOrder***. Vous pouvez trier par n'importe quelle propriété d'un objet (détails des propriétés sur notre page [Swagger](https://api.docage.com/swagger)), vous avez juste a spécifier le nom de la propriété pour ordonner en ascendant, et le nom de la propriété suivi de `_Desc` pour ordonner en descendant.\n\nExemple: `/Contacts?sortOrder=FirstName_Desc`"
+							},
+							"response": [
+								{
+									"id": "df60efb0-0397-4384-aaf2-02b0a90b14be",
+									"name": "Récupérer tous les contacts",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://api.docage.com/Contacts",
+											"protocol": "https",
+											"host": [
+												"api",
+												"docage",
+												"com"
+											],
+											"path": [
+												"Contacts"
+											]
+										}
+									},
+									"_postman_previewlanguage": "Text",
+									"header": null,
+									"cookie": [],
+									"responseTime": null,
+									"body": null
+								},
+								{
+									"id": "6c62e52b-accd-4303-bd08-da8484ccd5c6",
+									"name": "Récupérer toutes les transactions",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/Transactions",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"Transactions"
+											]
+										}
+									},
+									"_postman_previewlanguage": "Text",
+									"header": null,
+									"cookie": [],
+									"responseTime": null,
+									"body": null
+								},
+								{
+									"id": "74c7bf77-9573-4619-9baf-1ecc0e6096c2",
+									"name": "Récupérer tous les classeurs",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/Boxes",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"Boxes"
+											]
+										}
+									},
+									"_postman_previewlanguage": "Text",
+									"header": null,
+									"cookie": [],
+									"responseTime": null,
+									"body": null
+								}
+							]
+						}
+					],
+					"id": "6f4ab604-178e-4de2-8686-5af8ba73ce4a"
+				},
+				{
+					"name": "Récupérer une entité par son Id",
+					"id": "f106dcad-1354-468f-b9f9-6cd8e424af50",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/Contacts/ById/{{$guid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Contacts",
+								"ById",
+								"{{$guid}}"
+							]
+						},
+						"description": "Retourne un contact spécifique en fonction de l'Id renseigné."
+					},
+					"response": []
+				},
+				{
+					"name": "Créer une entité",
+					"id": "0a277755-0f01-48ea-b16c-461f117b3eb1",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Email\": \"a.einstein@example.com\",\r\n    \"FirstName\": \"Albert\",\r\n    \"LastName\": \"Einstein\",\r\n    \"Address1\": \"42 rue de l'espace\",\r\n    \"Address2\": \"\",\r\n    \"City\": \"Douala\",\r\n    \"State\": \"\",\r\n    \"ZipCode\": \"69000\",\r\n    \"Country\": \"Cameroun\",\r\n    \"Notes\": \"\",\r\n    \"Phone\": \"+237693249609\",\r\n    \"Mobile\": \"+237678730190\",\r\n    \"Company\": \"ENSPD\",\r\n    \"Gender\": 1,\r\n    \"Civility\": \"\",\r\n    \"ProfilePictureSmall\": \"JVBERi0xLjQNCiXi48 [...] VPRgo=\",\r\n    \"ProfilePictureMedium\": \"JVBERi0xLjQNCiXi48 [...] VPRgo=\",\r\n    \"ProfilePictureLarge\": \"JVBERi0xLjQNCiXi48 [...] VPRgo=\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.docage.com/Contacts",
+							"protocol": "https",
+							"host": [
+								"api",
+								"docage",
+								"com"
+							],
+							"path": [
+								"Contacts"
+							]
+						},
+						"description": "Crée un nouveau contact en envoyant son contenu au format JSON. Si la création du contact s'effectue avec succès, son Id est renvoyé dans la réponse de l'API.\n\n>**Vous pouvez trouver toutes les entités Docage avec toutes les propriétés sur la page [Swagger](https://api.docage.com/swagger)**."
+					},
+					"response": []
+				},
+				{
+					"name": "Modifier une entité",
+					"id": "586871e3-ed7b-48e8-9f60-8397a9ad9ca7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"Email\": \"johndoe@example.com\",\r\n  \"FirstName\": \"Johnny\",\r\n  \"Address1\": \"45 rue de l'espace\",\r\n  \"City\": \"Paris\",\r\n  \"ZipCode\": \"75000\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Contacts/{{$guid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Contacts",
+								"{{$guid}}"
+							]
+						},
+						"description": "Met à jour les propriétés d'une entité existante en envoyant les propriétés modifiées au format JSON.\n\nVous pouvez envoyer uniquement les propriétés que vous souhaitez modifier plutôt que de renvoyer la totalité de l'objet, pour réduire la taille de votre requête et la rendre plus rapide.\n\n>**Vous pouvez trouver toutes les entités Docage avec toutes les propriétés sur la page [Swagger](https://api.docage.com/swagger)**."
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer une entité",
+					"id": "8db5daac-0d2b-44e2-bb71-53a85622adcc",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/Contacts/{{$guid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Contacts",
+								"{{$guid}}"
+							]
+						},
+						"description": "Supprime une entité précise en spécifiant son **Id** dans une requête **DELETE**."
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer plusieurs entités",
+					"id": "4853c77a-79c4-4461-91d0-91abdcd7e433",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    \"9d3b0e17-bddb-40de-b9f7-944a613198d4\",\r\n    \"63c771ca-fd61-4f6b-90dc-bc910e5f925b\"\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{EntityType}}/BatchDelete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{EntityType}}",
+								"BatchDelete"
+							]
+						},
+						"description": "Supprime une ou plusieurs entités en envoyant un **tableau d'Id** dans le **corps** de la requête au format **JSON**."
+					},
+					"response": []
+				}
+			],
+			"id": "32eb37a1-41d6-471b-89f4-c07c7bb5db7e",
+			"description": "Dans les exemples suivants nous allons voir les requêtes communes basées sur l'objet Contact. Ces requêtes sont génériques à d'autres de nos objets (veuillez trouver les détails sur notre page [Swagger](https://api.docage.com/swagger))."
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Création en une requête",
+					"item": [
+						{
+							"name": "Avec contact existant",
+							"id": "6c211da0-a2c5-4d53-94b6-5fe1a01eaeb2",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Transaction",
+											"value": "{\n    \"Name\": \"Contrat avec client\",\n    \"IsTest\": \"true\",\n    \"TransactionFiles\": [\n        {\n            \"FileName\": \"Contrat client.pdf\",\n            \"FriendlyName\": \"Contrat\"\n        }\n    ],\n    \"TransactionMembers\": [\n        {\n            \"FriendlyName\": \"Client\"\n        }\n    ]\n}",
+											"type": "text"
+										},
+										{
+											"key": "Client",
+											"value": "\"2cc48009-cb0d-490a-a7b4-229187dd58bb\"",
+											"type": "text"
+										},
+										{
+											"key": "Client, Contrat",
+											"value": "{ \"Pages\": \"1\", \"Coordinates\": \"0, 0, 100, 100\" }",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://api.docage.com/Transactions/CreateFullTransaction",
+									"protocol": "https",
+									"host": [
+										"api",
+										"docage",
+										"com"
+									],
+									"path": [
+										"Transactions",
+										"CreateFullTransaction"
+									]
+								},
+								"description": "Pour comprendre cet exemple merci de lire au préalable [Créer et envoyer une transaction en  une seule requête](https://documentation.docage.com/?version=latest#d7f36b09-3c19-4e86-9e19-89c459539cd1).\n\nDans cet exemple les coordonnées d'un contact existant sont utilisées par le membre **Client**."
+							},
+							"response": []
+						},
+						{
+							"name": "Avec plusieurs signatures pour un contact",
+							"id": "9b22c031-b606-4a5e-a7af-42db61057a52",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Transaction",
+											"value": "{\n    \"Name\": \"Contrat avec client\",\n    \"IsTest\": \"true\",\n    \"TransactionFiles\": [\n        {\n            \"FileName\": \"Contrat client.pdf\",\n            \"FriendlyName\": \"Contrat\"\n        },\n        {\n           \"FileName\": \"Condition générale.pdf\",\n           \"FriendlyName\": \"CGU\"\n        }\n    ],\n    \"TransactionMembers\": [\n        {\n            \"FriendlyName\": \"Client\"\n        }\n    ]\n}",
+											"type": "text"
+										},
+										{
+											"key": "Client",
+											"value": "faee8536-e3e9-4fd0-a9e9-d2b3c4418bb3",
+											"type": "text"
+										},
+										{
+											"key": "Contrat",
+											"type": "file",
+											"src": "/C:/Users/steph/Documents/10 pages - 01.pdf"
+										},
+										{
+											"key": "CGU",
+											"type": "file",
+											"src": "/C:/Users/doria/Downloads/CGU.pdf"
+										},
+										{
+											"key": "Client, Contrat",
+											"value": "[{ \"Pages\": \"1\", \"Coordinates\": \"0, 0, 100, 100\" },{ \"Pages\": \"8\", \"Coordinates\": \"50, 30, 100, 100\" }]",
+											"type": "text"
+										},
+										{
+											"key": "Client, CGU",
+											"value": "{ \"Pages\": \"5\", \"Coordinates\": \"300, 60, 100, 100\" }",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/CreateFullTransaction",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"CreateFullTransaction"
+									]
+								},
+								"description": "Pour comprendre cet exemple merci de lire au préalable [Créer et envoyer une transaction en  une seule requête](https://documentation.docage.com/?version=latest#d7f36b09-3c19-4e86-9e19-89c459539cd1).\n\nDans cet exemple les coordonnées d'un contact existant sont utilisées par le membre **Client**."
+							},
+							"response": []
+						},
+						{
+							"name": "Avec création d'un nouveau contact",
+							"id": "356b8c51-2b98-4962-80b5-bc2f7205d97b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Transaction",
+											"value": "{\n    \"Name\": \"Contrat avec client\",\n    \"IsTest\": \"true\",\n    \"TransactionFiles\": [\n        {\n            \"FileName\": \"Contrat client.pdf\",\n            \"FriendlyName\": \"Contrat\"\n        }\n    ],\n    \"TransactionMembers\": [\n        {\n            \"FriendlyName\": \"Client\"\n        }\n    ]\n}",
+											"type": "text"
+										},
+										{
+											"key": "Client",
+											"value": "{\n  \"Email\": \"user@example.com\",\n  \"FirstName\": \"Steven\",\n  \"LastName\": \"HAWKINS\",\n  \"Address1\": \"42 rue de l'espace\",\n  \"Address2\": \"\",\n  \"City\": \"PARIS\",\n  \"State\": \"\",\n  \"ZipCode\": \"75000\",\n  \"Country\": \"FRANCE\",\n  \"Notes\": \"\",\n  \"Phone\": \"+33XXXXXXXXX\",\n  \"Mobile\": \"+33XXXXXXXXX\",\n  \"Company\": \"Docage\"\n}",
+											"type": "text"
+										},
+										{
+											"key": "Contrat",
+											"type": "file",
+											"src": "/C:/MyFiles/Contrat.pdf"
+										},
+										{
+											"key": "Client, Contrat",
+											"value": "{ \"Pages\": \"1\", \"Coordinates\": \"0, 0, 100, 100\" }",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/CreateFullTransaction",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"CreateFullTransaction"
+									]
+								},
+								"description": "Pour comprendre cet exemple merci de lire au préalable [Créer et envoyer une transaction en  une seule requête](https://documentation.docage.com/?version=latest#d7f36b09-3c19-4e86-9e19-89c459539cd1).\n\nDans cet exemple un nouveau contact est créé en même temps que la création de la transaction. Les coordonnées de ce contact sont ensuite utilisées par le membre **Client**."
+							},
+							"response": []
+						},
+						{
+							"name": "Avec modification d'un contact existant",
+							"id": "ba4ddc0d-22d5-4120-8284-4d647b01fc22",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Transaction",
+											"value": "{\n    \"Name\": \"Contrat avec client\",\n    \"IsTest\": \"true\",\n    \"TransactionFiles\": [\n        {\n            \"FileName\": \"Contrat client.pdf\",\n            \"FriendlyName\": \"Contrat\"\n        }\n    ],\n    \"TransactionMembers\": [\n        {\n            \"FriendlyName\": \"Client\"\n        }\n    ]\n}",
+											"type": "text"
+										},
+										{
+											"key": "Client",
+											"value": "{\n  \"Id\": \"88608c50-47ca-4ebd-9e0e-9bfc6b4f9979\",\n  \"Email\": \"user@example.com\",\n  \"FirstName\": \"Steven\",\n  \"LastName\": \"HAWKINS\",\n  \"Address1\": \"42 rue de l'espace\",\n  \"Address2\": \"\",\n  \"City\": \"PARIS\",\n  \"State\": \"\",\n  \"ZipCode\": \"75000\",\n  \"Country\": \"FRANCE\",\n  \"Notes\": \"\",\n  \"Phone\": \"+33XXXXXXXXX\",\n  \"Mobile\": \"+33XXXXXXXXX\",\n  \"Company\": \"Docage\"\n}",
+											"type": "text"
+										},
+										{
+											"key": "Contrat",
+											"type": "file",
+											"src": "/C:/MyFiles/Contrat.pdf"
+										},
+										{
+											"key": "Client, Contrat",
+											"value": "{ \"Pages\": \"1\", \"Coordinates\": \"0, 0, 100, 100\" }",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/CreateFullTransaction",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"CreateFullTransaction"
+									]
+								},
+								"description": "Pour comprendre cet exemple merci de lire au préalable [Créer et envoyer une transaction en  une seule requête](https://documentation.docage.com/?version=latest#d7f36b09-3c19-4e86-9e19-89c459539cd1).\n\nDans cet exemple un contact existant est modifié (car un Id a été spécifié dans la valeur de Client) en même temps que la création de la transaction. Les coordonnées de ce contact sont ensuite utilisées par le membre **Client**."
+							},
+							"response": []
+						},
+						{
+							"name": "A partir d'un modèle",
+							"id": "20d0ca81-dc31-40d3-9cc3-b1f6d0f62f69",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "TemplateId",
+											"value": "b951514f-1adc-4300-a305-608b983edd49",
+											"type": "text"
+										},
+										{
+											"key": "Contrat",
+											"type": "file",
+											"src": "/C:/Users/Jimdun/Desktop/Pdf/Devis.pdf"
+										},
+										{
+											"key": "Client",
+											"value": "88608c50-47ca-4ebd-9e0e-9bfc6b4f9979",
+											"type": "text"
+										},
+										{
+											"key": "Client, Contrat",
+											"value": "{ \"Pages\": \"1\", \"Coordinates\": \"0, 0, 100, 100\" }",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/CreateFullTransaction",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"CreateFullTransaction"
+									]
+								},
+								"description": "Pour comprendre cet exemple merci de lire au préalable [Créer et envoyer une transaction en  une seule requête](https://documentation.docage.com/?version=latest#d7f36b09-3c19-4e86-9e19-89c459539cd1).\n\nDans cet exemple une nouvelle transaction est créée à partir d'un modèle de transaction existant car la clé/valeur TemplateId est spécifiée.  \nNotez qu'il est possible de créer un nouveau contact ou de modifier un contact existant en combinant cet exemple avec les précédents."
+							},
+							"response": []
+						},
+						{
+							"name": "Avec modification des propriétés héritées du modèle",
+							"id": "deea0ac6-f76c-430d-a375-8b3e50b57a9e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "TemplateId",
+											"value": "b951514f-1adc-4300-a305-608b983edd49",
+											"type": "text"
+										},
+										{
+											"key": "Transaction",
+											"value": "{\n    \"Name\": \"Contrat avec client\",\n    \"IsTest\": \"true\",\n    \"DaysBeforeEnding\": 10\n}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/CreateFullTransaction",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"CreateFullTransaction"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Sans la lancer",
+							"id": "076b82a1-9358-49ba-b9f1-aced9c2ff432",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Transaction",
+											"value": "{\n    \"Id\": \"0c9cbb0e-8091-44ad-8004-fcfd7611fb20\",\n    \"Name\": \"Transaction test from API\",\n    \"IsTest\": \"true\",\n    \"TransactionFiles\": [\n        {\n            \"Id\": \"99f5e33f-377d-46ea-a183-0b8619134734\",\n            \"FileName\": \"document.pdf\",\n            \"FriendlyName\": \"Contrat\",\n            \"TransactionId\": \"0c9cbb0e-8091-44ad-8004-fcfd7611fb20\"\n        }\n    ],\n    \"TransactionMembers\": [\n        {\n            \"Id\": \"c7a5d973-27a2-4f40-bbe3-884e272cfce0\",\n            \"FriendlyName\": \"Client\",\n            \"ContactId\": \"88608c50-47ca-4ebd-9e0e-9bfc6b4f9979\",\n            \"TransactionId\": \"0c9cbb0e-8091-44ad-8004-fcfd7611fb20\",\n            \"TransactionMemberSignatureLocations\": [\n                {\n                    \"Pages\": \"1\",\n                    \"Coordinates\": \"0, 0, 100, 100\",\n                    \"TransactionMemberId\": \"c7a5d973-27a2-4f40-bbe3-884e272cfce0\",\n                    \"TransactionFileId\": \"99f5e33f-377d-46ea-a183-0b8619134734\"\n                }\n            ]\n        }\n    ]\n}",
+											"type": "text",
+											"contentType": "application/json"
+										},
+										{
+											"key": "Contrat",
+											"type": "file",
+											"src": "/C:/Users/doria/Downloads/Contrat.pdf"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/CreateFullTransaction?launchTransaction=false",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"CreateFullTransaction"
+									],
+									"query": [
+										{
+											"key": "launchTransaction",
+											"value": "false"
+										}
+									]
+								},
+								"description": "Pour créer une transaction sans la lancer, il suffit de rajouter l'argument *launchTransaction=false* dans l'URL de votre requête."
+							},
+							"response": []
+						},
+						{
+							"name": "Avec fourniture des Ids par le développeur",
+							"id": "a87f4b90-36f0-4b89-86e2-9e952dd9ffda",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "Transaction",
+											"value": "{\n    \"Id\": \"0c9cbb0e-8091-44ad-8004-fcfd7611fb20\",\n    \"Name\": \"Contrat avec client\",\n    \"IsTest\": \"true\",\n    \"TransactionFiles\": [\n        {\n            \"Id\": \"99f5e33f-377d-46ea-a183-0b8619134734\",\n            \"FileName\": \"document.pdf\",\n            \"FriendlyName\": \"Contrat\",\n            \"TransactionId\": \"0c9cbb0e-8091-44ad-8004-fcfd7611fb20\"\n        }\n    ],\n    \"TransactionMembers\": [\n        {\n            \"Id\": \"c7a5d973-27a2-4f40-bbe3-884e272cfce0\",\n            \"FriendlyName\": \"Client\",\n            \"ContactId\": \"88608c50-47ca-4ebd-9e0e-9bfc6b4f9979\",\n            \"TransactionId\": \"0c9cbb0e-8091-44ad-8004-fcfd7611fb20\",\n            \"TransactionMemberSignatureLocations\": [\n                {\n                    \"Pages\": \"1\",\n                    \"Coordinates\": \"0, 0, 100, 100\",\n                    \"TransactionMemberId\": \"c7a5d973-27a2-4f40-bbe3-884e272cfce0\",\n                    \"TransactionFileId\": \"99f5e33f-377d-46ea-a183-0b8619134734\"\n                }\n            ]\n        }\n    ]\n}",
+											"type": "text",
+											"contentType": "application/json"
+										},
+										{
+											"key": "Contrat",
+											"type": "file",
+											"src": "/C:/Users/doria/Downloads/Contrat.pdf"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/CreateFullTransaction",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"CreateFullTransaction"
+									]
+								},
+								"description": "Les liaisons des objets se font via les Ids fournis. Utile pour faire correspondre les Ids des objets Docage avec les Ids de vos objets.  \nOn crée un objet Transaction avec chaque élément dans TransactionMembers, TransactionFiles et TransactionMemberSignatureLocations avec des Ids spécifiés.\n   \nOn ajoute les infos des membres ensuite via les FriendlyName ***(NOTE: Le FriendlyName choisit pour un membre ne doit pas contenir d'espace, les espaces seront supprimés du champ le cas échéant)*** :  \n###### **Si on spécifie uniquement un Id:**  \nLe membre aura les coordonnées du contact ou du DocageUser correspondant.  \n###### **Si on spécifie un objet Contact:**  \n- On met à jour le Contact s'il contient un Id ou si le TransactionMember avec le même FriendlyName contient un ContactId \n- On crée un nouveau Contact s'il ne contient pas d'Id et si le TransactionMember avec le même FriendlyName ne contient pas un ContactId.  \n\nOn ajoute ensuite le contenu des TransactionFiles via FriendlyName et FormFile"
+							},
+							"response": []
+						}
+					],
+					"id": "abc154d6-f11f-4b7f-bfc1-c256acf0183c",
+					"description": "La route **https://api.docage.com/Transactions/CreateFullTransaction** vous permet de créer (et envoyer) une transaction avec une seule requête via un FormData dans lequel vous renseigner différentes paires de clé/valeur en fonction de quelle façon vous souhaitez construire votre transaction. Voici les clés/valeurs nécessaires pour construire votre transaction :\n\n- **Transaction -> Structure de la transaction** : la valeur doit être la structure de votre transaction avec ses TransactionMembers et ses TransactionFiles. Les TransactionMembers et TransactionFiles doivent obligatoirement avoir un FriendlyName.\nLes autres propriétés sont facultatives. Par défaut un TransactionMember est Signataire par SMS. Par défaut un TransactionFile est un PDF à signer.  \nExemple de valeur pour **Transaction** avec un membre et un document :\n```\n{\n  \"Name\": \"Contrat avec client\",\n  \"TransactionFiles\": [\n    {\n      \"FileName\": \"Contrat client.pdf\",\n      \"FriendlyName\": \"Contrat\"\n    }\n  ],\n  \"TransactionMembers\": [\n    {\n      \"FriendlyName\": \"Client\"\n    }\n  ]\n}\n```\n      \n- **TemplateId -> Copie d'un modèle de transaction** : la valeur doit être l'Id de votre modèle de transaction. Lorsque cette clé/valeur est renseignée la transaction générée sera une copie du modèle.  \nExemple de valeur pour TemplateId :\n```\n88608c50-1adc-4300-a305-608b983edd79\n```\n  \n- **FriendlyName d'un TransactionMember -> Coordonnées d'un membre** : la clé, par exemple **Client** doit correspondre au FriendlyName d'un des TransactionMembers présent dans la structure de la transaction ou dans le modèle de transaction. La valeur fournie déterminera la provenance du membre  :\n    - **Un Id -> Utilisation d'un Contact ou DocageUser existant** dans ce cas le membre aura les coordonnées du contact ou du DocageUser correspond à cet Id.\nExemple de valeur avec un Id :\n```\nb951514f-1adc-4300-a305-608b983edd79\n```\n    - **Un objet Contact -> Création d'un nouveau contact** : dans ce cas un nouveau contact sera créé et le membre aura les coordonnées de ce contact. Les propriétés LastName et Email sont obligatoires pour créer un nouveau contact. N'oubliez pas le numéro de mobile si le membre doit signer par SMS.  \nExemple de valeur pour un objet Contact :\n```\n{\n  \"LastName\": \"LEPETIT\",\n  \"FirstName\": \"Pierre\",\n  \"Email\": \"plepetit@clientheureux.com\",\n  \"Mobile\": \"0780885009\"\n}\n```\n    - **Un objet Contact avec sa propriété Id -> Utilisation et Modification d'un contact existant** : dans ce cas le contact avec l'Id correspondant sera mis à jour et le membre aura les coordonnées de ce contact. Toutes les propriétés du contact sont facultatives car les propriétés obligatoires seront reprises du Contact existant (sauf bien sûr si elles n'ont pas été renseignées).  \nExemple de valeur pour un objet Contact avec mise à jour de son mobile et de sa ville :\n```\n{\n  \"Id\": \"99608c50-48ca-4ebd-9e0e-9bfc6b4f9979\",\n  \"Mobile\": \"0780885009\",\n  \"City\": \"LYON\"\n}\n```\n  \n- **FriendlyName d'un TransactionFile -> Contenu d'un document** : la clé, par exemple **Contrat** doit correspondre au FriendlyName d'un des TransactionFiles présent dans la structure de la transaction ou dans le modèle de transaction. La valeur fournie déterminera la génération du TransactionFile :\n    - **Un File -> PDF envoyé**.\n    - **Un Id -> Document Docage** : dans ce cas un PDF sera généré à partir du Document Docage correspondant à l'ID.  \nExemple de valeur avec un Id de Document Docage :\n```\na851514f-1adc-4300-a305-608b983edd79\n```\n  \n- **FriendlyName d'un TransactionMember ET FriendlyName d'un TransactionFile -> Signature visuelle** séparés par une virgule : la clé, par exemple **Client, Contrat** doit correspondre aux FriendlyNames d'un TransactionMember et d'un TransactionFile présents dans la structure de la transaction ou dans le modèle de transaction. La valeur doit être un objet TransactionMemberSignatureLocation allégé contenant les propriétés Pages et Coordinates.\nExemple : \n```\n{\n  \"Pages\": \"1\",\n  \"Coordinates\": \"0, 0, 100, 100\"\n}\n```"
+				},
+				{
+					"name": "Création pas à pas",
+					"item": [
+						{
+							"name": "Créer une transaction",
+							"id": "49cd932d-b84f-44de-88be-a305ea588b1a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"Name\": \"Transaction test from API\",\n    \"IsTest\": \"true\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Transactions",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions"
+									]
+								},
+								"description": "Crée une nouvelle transaction en statut \"Draft\" en envoyant son contenu en format JSON. Si la création de la transaction s'effectue avec succès, son Id est renvoyé dans la réponse de l'API."
+							},
+							"response": []
+						},
+						{
+							"name": "Ajouter un document à la transaction",
+							"id": "b220ae8f-4c28-45d7-a7fd-2603e375b755",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "TransactionId",
+											"value": "2b35b9ac-92d6-4377-8179-01188891ab41",
+											"type": "text"
+										},
+										{
+											"key": "FileName",
+											"value": "document.pdf",
+											"type": "text"
+										},
+										{
+											"key": "FileToUpload",
+											"description": "Accept only one file. Maximum size: 100Mo",
+											"type": "file",
+											"value": null
+										},
+										{
+											"key": "FriendlyName",
+											"value": "Document de vente",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/TransactionFiles",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"TransactionFiles"
+									]
+								},
+								"description": "Ajoute un document à la transaction. Ce document peut être à signer ou être une annexe selon la valeur du champ `Type`.\n\nLe champ `FriendlyName` va servir d'identifiant unique pour le document. Ce champ est obligatoire.\n\n## L'énumération du champ `Type` de TransactionFile:\n\n| Valeur | Description |\n|:------:|:------------|\n| 0      | ToSign, ce document est à signer par le ou les signataires |\n| 1      | Attachment, ce document est une annexe qui sera jointe à la transaction et qui ne nécessite aucune signature |\n\nPour cette requête il est nécessaire d'utiliser un FormData dans le corps de la requête car il permet d'envoyer votre fichier plus rapidement qu'avec du JSON."
+							},
+							"response": []
+						},
+						{
+							"name": "Ajouter un membre à la transaction",
+							"id": "d1040785-989c-4a66-9afd-07f779be5086",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"TransactionId\": \"2b35b9ac-92d6-4377-8179-01188891ab41\",\n    \"FriendlyName\": \"Client\",\n    \"ContactId\": \"43c10bb1-907a-44ce-23de-08d7c01f5081\",\n    \"MemberRole\": 0,\n    \"SignMode\": 0\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/TransactionMembers",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"TransactionMembers"
+									]
+								},
+								"description": "Ajoute un membre à la transaction. Ce membre peut être signataire ou observateur de la transaction.\n\nLe champ `FriendlyName` va servir d'identifiant unique pour le membre. Ce champ est obligatoire. ***(NOTE: Le FriendlyName choisit pour un membre ne doit pas contenir d'espace, les espaces seront supprimés du champ le cas échéant)***\n\n## L'énumération du champ `MemberRole` de TransactionMember:\n\nPar défaut un membre est signataire mais vous pouvez choisir de l'ajouter en tant qu'observateur\n\n* Signatory: Signataire, peut signer ou refuser une transaction.\n* Observer: Observateur, il suit seulement les étapes de la transaction, il ne peut pas effectuer d'action sur la transaction.\n\n| Value | Description |\n|:-----:|:--------|\n| 0     | Signatory (par défaut) |\n| 2     | Observer |\n\n## L'énumération du champ `SignMode` de TransactionMember:\n\nPour chaque signataire, vous pouvez choisir un mode de validation de la signature (signature par SMS ou par email).\n\n| Value | Description |\n|:-----:|:--------|\n| 0     | SMS (par défault) |\n| 1     | Email |"
+							},
+							"response": []
+						},
+						{
+							"name": "Ajouter un emplacement de signature à un membre",
+							"id": "8d7ca5cd-ab15-4115-ad20-744707fb704c",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"TransactionMemberId\": \"57ab98c4-a655-4c50-bbc9-b9cf5112b1cb\",\n\t\"TransactionFileId\": \"b3c3be65-2254-4bd9-9e05-ea0a73af6c17\",\n\t\"Coordinates\": \"0, 0, 100, 100\",\n\t\"Pages\": \"1\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/SignatureLocations",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"SignatureLocations"
+									]
+								},
+								"description": "Ajoute un emplacement de signature à un membre de la transaction.\n\nUn emplacement de signature est l'encart de signature qui va s'afficher sur le document final. Vous pouvez ajouter 20 emplacements de signature par membre.\n\n**Point sur le champ `Coordinates`:** `x,y,width,height`  \n`x` : distance depuis le bord gauche du document  \n`y` : distance depuis le bord inférieur du document  \n`width` : largeur de l'encart de signature  \n`height` : hauteur de l'encart de signature\n___\n**IMPORTANT:** \nLes emplacements de signatures sont purement esthétiques et sont donc facultatifs. Ils ne permettent pas de rendre le document légalement signé, ce sont les certificats ajoutés au document final après signature qui permettent cela."
+							},
+							"response": []
+						},
+						{
+							"name": "Lancer une transaction",
+							"id": "9f0575f5-29ae-4e4f-8fe0-a18777d835a6",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/LaunchTransaction/2b35b9ac-92d6-4377-8179-01188891ab41",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"LaunchTransaction",
+										"2b35b9ac-92d6-4377-8179-01188891ab41"
+									]
+								},
+								"description": "Lance la transaction, ce qui lance donc le procédé de signature. \n\nLe lancement d'une transaction peut s'effectuer uniquement après avoir effectué les étapes précédentes (à part celle des emplacement de signature), c'est à dire que la transaction doit avoir au moins un membre et un document à signer. Une erreur vous sera retournée par l'API dans le cas contraire.\n  \nUne fois le lancement est effectué il est impossible d'éditer la transaction ou son contenu."
+							},
+							"response": []
+						}
+					],
+					"id": "cbf4e629-3a83-43e4-a217-c3d3d5b39717",
+					"description": "Dans ces seconds exemples, nous allons voir comment créer une transaction, lui ajouter des documents, lui ajouter des membres ainsi que des emplacements de signatures, et enfin lancer la transaction.\n\nNote: Dans ces exemples seuls les champs à envoyer obligatoirement sont renseignés. Vous pouvez totalement rajouter des champs à vos objets envoyés, par exemple la date d'expiration de votre transaction, ou la fréquence de rappel automatique aux signataires.\n\nVous pouvez trouver tous les champs personnalisables de l'entité Transaction ainsi que de toutes les entités sur la page [Swagger](https://api.docage.com/swagger)."
+				},
+				{
+					"name": "Autres requêtes pour les transactions",
+					"item": [
+						{
+							"name": "Récupérer le statut d'une transaction",
+							"id": "54ca2710-9f38-40a0-9428-41246a31c7e8",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/Status/2b35b9ac-92d6-4377-8179-01188891ab41",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"Status",
+										"2b35b9ac-92d6-4377-8179-01188891ab41"
+									]
+								},
+								"description": "Récupère le statut actuelle d'une transaction, en renseignant son Id.\n\nL'énumération du champ `Status` de Transaction:\n\n| Valeur  |  Statut   | Description |\n|:-------:|:----------|-------------|\n| 0       | Draft   | La transaction est en mode brouillon, elle n'est pas encore envoyée  |\n| 1       | Scheduled  | La transaction est créée et programmée pour être lancée à un moment défini |\n| 2       | WaitingInformations  | En attente d'informations, au moins un des membres de la transaction qui a un formulaire à remplir ne l'a pas encore rempli |\n| 3       | Active  | La transaction est lancée, vous ne pouvez plus la modifier et les signataires peuvent la signer |\n| 4       | Validated  | La transaction a été validée par tous les validateurs de la transaction |\n| 5       | Signed    | La transaction a été signée par tous les signataires |\n| 6       | Expired | La transaction est arrivée à expiration. Vous pouvez donner une valeur au champ `Transaction.DaysBeforeEnding` de 1 à 30, par défaut la transaction expire 30 jours après son lancement |\n| 7       | Refused | Un signataire a refusé de signer la transaction, vous pouvez retrouver la raison  grâce au champ `TransactionMember.AbortReason` |\n| 8       | Aborted | La transaction a été annulée par un utilisateur |"
+							},
+							"response": []
+						},
+						{
+							"name": "Annuler une transaction",
+							"id": "8cb64674-c7ee-4459-971f-71ecf3f6fc0e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/Abort/9d3b0e17-bddb-40de-b9f7-944a613198d4",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"Abort",
+										"9d3b0e17-bddb-40de-b9f7-944a613198d4"
+									]
+								},
+								"description": "Annule une transaction en cours, en renseignant son Id.  \nLa transaction doit être obligatoirement au statut `Active` pour pouvoir l'annuler."
+							},
+							"response": []
+						},
+						{
+							"name": "Envoyer un rappel",
+							"id": "a3195a50-488f-4a6a-974e-64f95fec04c6",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/SendReminders/9d3b0e17-bddb-40de-b9f7-944a613198d4",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"SendReminders",
+										"9d3b0e17-bddb-40de-b9f7-944a613198d4"
+									]
+								},
+								"description": "Envoie manuellement un rappel aux signataires de la transaction, indépendamment du rappel automatique programmé lors de la création de la transaction.  \nLa transaction doit être obligatoirement au statut `Active` pour pouvoir envoyer un rappel.\n\nSeuls les signataires qui n'ont pas encore signé la transaction obtiendront un rappel."
+							},
+							"response": []
+						},
+						{
+							"name": "Télécharger tous les fichiers d'une transaction",
+							"id": "4c0b1ff7-475c-4e0e-bfc1-29bfaa6f9d2a",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/DownloadDocument/9d3b0e17-bddb-40de-b9f7-944a613198d4",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"DownloadDocument",
+										"9d3b0e17-bddb-40de-b9f7-944a613198d4"
+									]
+								},
+								"description": "Télécharge tous les fichiers d'une transaction en renseignant son Id. Les fichiers seront contenus dans une archive ZIP."
+							},
+							"response": []
+						},
+						{
+							"name": "Télécharger un fichier d'une transaction",
+							"id": "13a788a0-3205-4ab1-be27-517c1aab8af5",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/TransactionFiles/DownloadDocument/t5gb0e17-bddb-40de-b9f7-944a613192a7",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"TransactionFiles",
+										"DownloadDocument",
+										"t5gb0e17-bddb-40de-b9f7-944a613192a7"
+									]
+								},
+								"description": "Télécharge le contenu (le fichier) d'un TransactionFile en renseignant son Id. L'API renvoie dans sa réponse un fichier PDF encodé en base 64.\n\nLe fichier sera téléchargé en l'état. C'est à dire que si la transaction est signée partiellement, le fichier sera envoyé avec les signatures des membres qui ont déjà signé. Si la transaction est signée (tous les signataires ont signé), le fichier final sera envoyé.\n\n**Note:** seul le fichier final est légalement valide."
+							},
+							"response": []
+						},
+						{
+							"name": "Télécharger le fichier de preuve",
+							"id": "c2006e97-b12a-4bda-ab5c-03b9c1dcbf36",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/Transactions/DownloadProofFile/c6f87fe5-2d6c-4ec8-b0e1-d191a33b98e4",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Transactions",
+										"DownloadProofFile",
+										"c6f87fe5-2d6c-4ec8-b0e1-d191a33b98e4"
+									]
+								},
+								"description": "Lorsque la signature est achevée et signée par tous les signataires, vous pouvez télécharger le fichier de preuve de la transaction en plus du document final.  \nCe document est utilisé en cas de litige. La réponse de l'API envoie le fichier encodé en base 64.\n\nÀ savoir: le fichier de preuve peut prendre un certain temps avant d'être créé après la fin de la transaction."
+							},
+							"response": []
+						},
+						{
+							"name": "Supprimer un/des membres d'une/plusieurs transactions",
+							"id": "39d56bbb-1fb4-45ba-9531-cab361591aed",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    \"57ab98c4-a655-4c50-bbc9-b9cf5112b1cb\",\r\n    \"12e5147e-24c8-4e18-bc7f-5c4a4dda4c47\"\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/TransactionMembers/BatchDelete",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"TransactionMembers",
+										"BatchDelete"
+									]
+								},
+								"description": "Supprime un ou plusieurs membres d'une ou de plusieurs transactions, en envoyant dans le corps de la requête un array de tous les Ids des TransactionMembers sous format JSON.\n\nNotez que vous ne pouvez supprimer des membres que de transactions qui sont au statut `Draft`."
+							},
+							"response": []
+						},
+						{
+							"name": "Supprimer un/des fichiers d'une/plusieurs transactions",
+							"id": "c536cd2d-f42b-470f-9713-9bb1341a3e41",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    \"57ab98c4-a655-4c50-bbc9-b9cf5112b1cb\",\r\n    \"12e5147e-24c8-4e18-bc7f-5c4a4dda4c47\"\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/TransactionFiles/BatchDelete",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"TransactionFiles",
+										"BatchDelete"
+									]
+								},
+								"description": "Supprime un ou plusieurs fichiers d'une ou de plusieurs transactions, en envoyant dans le corps de la requête un array de tous les Ids des TransactionFiles sous format JSON.\n\nNotez que vous ne pouvez supprimer des fichiers que de transactions qui sont au statut `Draft`."
+							},
+							"response": []
+						}
+					],
+					"id": "682f9925-7557-4f33-8c89-7fd7d1626959",
+					"description": "Voici maintenant quelques exemples d'autres types de requêtes que vous pouvez effectuer avec les transactions. Par exemple, consulter son statut, la modifier en supprimant des membres ou des fichiers de cette transaction, ou télécharger les documents finaux de celle-ci une fois que la signature de tous les membres est effectuée."
+				},
+				{
+					"name": "TransactionMember",
+					"item": [
+						{
+							"name": "Chercher memre de la transaction",
+							"id": "c0f4124d-2edb-48b2-a3ae-0faae6c069fe",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "Afichage des membres issus de la transaction",
+							"id": "4f2a061c-0717-4feb-ae67-e586e7bc62ea",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "creer membre de la transcation",
+							"id": "66267c2d-9d1d-44c6-9293-26336d333889",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					],
+					"id": "6111b64d-6b8a-4c01-946e-c7aac9d5f235",
+					"description": "Un membre d'une transaction interagit avec la transaction en fonction de son rôle :\n#### Enumération de `Role` de TransactionMember:\n\n| Valeur | Description |\n|:------:|:------------|\n| 0      | Signatory : Signataire, peut signer ou refuser la transaction |\n| 1      | Validator : Validateur (à venir), peut valider la transaction |\n| 2      | Follower : Observateur, est notifié de l'avancement de la transaction |\n\nLa propriété `MemberType` permet de définir le type de membre en fonction de la personne \n à laquelle il est lié. Un membre peut-être de 3 types.\n\n#### Enumération de `MemberType` de TransactionMember:\n\n| Valeur | Description |\n|:------:|:------------|\n| 0      | DocageUser : le membre est un utilisateur Docage |\n| 1      | Contact : le membre est un contact |\n| 2      | Dynamic : valable uniquement dans un modèle de transaction |\n\nLes membres dynamiques permettent de créer des membres qui sont encore indéfinis. Ils devront être remplacés par un contact ou un utilisateur lors de la génération d'une transaction à partir d'un modèle.\n\nEn fonction du statut de la transaction et des actions du membre, sa propriété `status` évolue au fil de la transaction :\n\n#### Enumération de `MemberStatus` de TransactionMember:\n\n| Valeur | Description |\n|:------:|:------------|\n| 0      | FormToFill : le membre doit remplir un formulaire |\n| 1      | Pending : le membre a une action à effectuer |\n| 2      | Processing : le membre a consulté la transaction |\n| 3      | Validated : le membre a validé la transaction (à venir) |\n| 4      | Signed : le membre a signé la transaction |\n| 5      | Refused : le membre a refusé la transaction |\n\nLa propriété `FriendlyName` correspond au champ **Identifiant** présent dans l'application. Elle est obligatoire et permet de remplacer ou de mettre un jour un membre dans un modèle. Exemple de valeur pour FriendlyName : `Client`, `Commercial`."
+				}
+			],
+			"id": "050b3501-4c3f-49e5-9ca9-19f9abe4bf2d",
+			"description": "Une transaction est l'objet qui permet de faire signer des documents. En complément de cette documentation, toutes les propriétés et routes des Transactions sont sur notre page [Swagger Docage](https://api.docage.com/swagger). \nEn plus de ses propriétés, une transaction possède des collections indispensables.\n- **TransactionFiles** : Ce sont les fichiers de la transaction qui peuvent être des documents PDF ou un documents Docage.\n- **TransactionMembers** : Ce sont les membres de la transaction qui peuvent être signataires ou observateurs. Lorsqu'il est signataire un membre peut avoir une collection de signatures visuelles (**TransactionMemberSignatureLocations**), elles sont facultatives mais utilisées dans pratiquement tous les cas pour faciliter la visualisation des signatures sans consulter les certificats.\n\nLa propriété **Status** permet de suivre l'avancement de la transaction. Le statut évolue en fonction des actions des membres de la transaction et en fonction des actions de utilisateurs Docage qui ont le droit de modifier la transaction.\n\n#### Enumération de `Status` de Transaction:\n\n| Valeur | Description |\n|:------:|:------------|\n| -100      | All : utilisé uniquement dans les Webhooks |\n| 0      | Draft : transaction créée mais non envoyée |\n| 1      | Scheduled : transaction créée et sera envoyée à la date indiquée |\n| 2      | FormToFill : transaction envoyée et au moins un formulaire n'a pas été rempli |\n| 3      | Active : transaction envoyée |\n| 4      | Validated : transaction validée par tous les validateurs |\n| 5      | Signed : transaction signée par tous les signataires |\n| 6      | Expired : transaction expirée |\n| 7      | Refused : transaction refusée par au moins un membre |\n| 8      | Aborted : transaction annulée |",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7cfdf335-da19-4b53-bcb9-f8eb1f4d5519",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "91f26e29-2f14-492d-9c60-30f84dc4557b",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Webhook",
+			"item": [
+				{
+					"name": "Créer un Webhook",
+					"id": "21613f6e-770f-43a9-a62f-c788b8689683",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpoint\",\r\n    \"Name\": \"Contact Modification\",\r\n    \"Description\": \"Modification des contacts\",\r\n    \"EntityTypeName\": \"Contact\",\r\n    \"Action\": \"2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Webhooks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Webhooks"
+							]
+						},
+						"description": "Pour créer un Webhook vous devez définir l'URL, le périmètre, l'évènement concerné ainsi qu'un éventuel paramètre d'évènement\n\n#### Définition de l'Url\nRenseignez la propriété Url qui recevra la requête **POST** en temps réel à chaque fois que l'évènement se déclenche. Par exemple : \n>\"Url\": \"https://www.clientheureux.com/endpoint\"\n\n#### Définition du périmètre\n###### Tous les objets d'un certain type\nRenseignez la propriété EntityTypeName.  \nPar exemple pour tous les contacts  : \n>\"EntityTypeName\": \"Contact\"  \n\nVoici les types d'objet que vous pouvez cibler :  \n\n| Valeur | Description |\n|:---:|-------------|\n| Box | Classeur |\n| BoxFile| Fichier de classeur |\n| Circle | Cercle |\n| Contact | Contact |\n| Mailbox | Compte email |\n| DocageUser| Utilisateur |\n| Organization | Organisation |\n| Document | Document |\n| Transaction | Transaction |\n\n###### Tous les objets créés à partir d'un modèle\nRenseignez l'Id du modèle dans la propriété correspondante.\nPar exemple pour un modèle de transaction :  \n>\"TransactionId\": \"4d8ad20e-1486-4bbd-a758-1e39579d52fc\"\n\n###### Un objet unique\nRenseignez l'Id de l'objet dans la propriété correspondante.\nPar exemple pour un classeur :  \n>\"BoxId\": \"08c0f5cf-a461-46d0-b520-b8ce53446eea\"\n\n\n#### Définition de l'évènement **Action**\n\n| Valeur | Description | Utilisable avec |\n|:--:|---|-------------|\n| 0 | Suppression | Tous les objets |\n| 1 | Création | Tous les objets |\n| 2 | Modification | Tous les objets |\n| 3 | Changement d'état | Tous les objets |\n| 10 | Suppression d'un objet dans un classeur | Classeur |\n| 11 | Ajout d'un objet dans un classeur | Classeur |\n| 20 | Changement de statut d'une transaction | Transaction |"
+					},
+					"response": []
+				},
+				{
+					"name": "Etre notifié lorsqu'une entité change d'état",
+					"id": "7cb7b796-7fb8-4c17-b213-1ffb10e5384c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpoint\",\r\n    \"Name\": \"Changement état contacts\",\r\n    \"Description\": \"Synchronisation état des contacts\",\r\n    \"EntityTypeName\": \"Contact\",\r\n    \"Action\": \"3\",\r\n    \"EntityStateTarget\": \"-100\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Webhooks",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Webhooks"
+							]
+						},
+						"description": "Pour être notifié lorsqu'une entité change d'état il faut spécifier le paramètre d'évènement **EntityStateTarget**.\n\n#### Définition de l'état ciblé\nVoici les différentes valeurs pour la propriété EntityStateTarget:  \n\n| Valeur | Etat|\n|:---:|-------------|\n| 0 | Actif |\n| -1| Masqué |\n| -2 | Supprimé |\n| -3 | Bloqué |\n| -100| Tous |"
+					},
+					"response": [
+						{
+							"id": "7ae17148-2aaf-44ee-a9c8-1a10008c9138",
+							"name": "Etre notifié lorsqu'une Transaction est supprimée",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpointCRM\",\r\n    \"Name\": \"Transactions supprimées\",\r\n    \"Description\": \"Suppression transactions dans le CRM\",\r\n    \"EntityTypeName\": \"Transaction\",\r\n    \"Action\": \"3\",\r\n    \"EntityStateTarget\": \"-2\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Webhooks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Webhooks"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": null,
+							"cookie": [],
+							"responseTime": null,
+							"body": null
+						},
+						{
+							"id": "4110c06f-26f7-4080-8a40-252f57ca1f22",
+							"name": "Etre notifié lorsqu'un Utilisateur est bloqué",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpointCRM\",\r\n    \"Name\": \"Utilisateurs bloqués\",\r\n    \"Description\": \"Bloquage utilisateurs dans le CRM\",\r\n    \"EntityTypeName\": \"DocageUser\",\r\n    \"Action\": \"3\",\r\n    \"EntityStateTarget\": \"-3\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Webhooks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Webhooks"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": null,
+							"cookie": [],
+							"responseTime": null,
+							"body": null
+						},
+						{
+							"id": "be95d530-b5c1-4e9c-87d1-cd323a0ca410",
+							"name": "Etre notifié lorsqu'un Utilisateur est débloqué",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpointCRM\",\r\n    \"Name\": \"Utilisateurs débloqués\",\r\n    \"Description\": \"Débloquage utilisateurs dans le CRM\",\r\n    \"EntityTypeName\": \"DocageUser\",\r\n    \"Action\": \"3\",\r\n    \"EntityStateTarget\": \"0\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Webhooks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Webhooks"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": null,
+							"cookie": [],
+							"responseTime": null,
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Etre notifié lorsqu'une Transaction change de statut",
+					"id": "f8f4ff05-f9d7-4be1-a481-59367812d9e7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpoint\",\r\n    \"Name\": \"Transactions signées\",\r\n    \"Description\": \"Signature des transactions\",\r\n    \"EntityTypeName\": \"Transaction\",\r\n    \"Action\": \"20\",\r\n    \"TransactionStatusTarget\": \"-100\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Webhook",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Webhook"
+							]
+						},
+						"description": "Pour être notifié lorsqu'une transaction chamge de statut il faut spécifier le paramètre d'évènement **TransactionStatusTarget**.\n\n#### Définition du statut ciblé\nVoici les différentes valeurs pour la propriété TransactionStatusTarget :  \n\n| Valeur | Statut| Explications |\n|:---:|-------------|-----------|\n| -100| Tous | Tous les statuts |\n| 0| Brouillon | Créée mais non envoyée |\n| 1| Programmée | Créée et envoi programmé  à la date indiquée |\n| 2| En attente d'informations | Au moins un formulaire n'a pas été rempli |\n| 3| En cours | Envoyée |\n| 4| Validée | Validée par tous les validateurs |\n| 5 | Signée| Signée par tous les signataires |\n| 6| Expirée | La date d'expiration est dépassée |\n| 8| Annulée| Annulée par un utilisateur |"
+					},
+					"response": [
+						{
+							"id": "48fde34e-4cb6-4639-aa29-63195e035202",
+							"name": "Etre notifié lorsqu'une Transaction est signée",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpoint\",\r\n    \"Name\": \"Transactions signées\",\r\n    \"Description\": \"Signature des transactions\",\r\n    \"EntityTypeName\": \"Transaction\",\r\n    \"Action\": \"20\",\r\n    \"TransactionStatusTarget\": \"5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Webhooks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Webhooks"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": null,
+							"cookie": [],
+							"responseTime": null,
+							"body": null
+						},
+						{
+							"id": "db7fb62d-3df2-45e5-945b-f5c2d34ff2b3",
+							"name": "Etre notifié lorsqu'une Transaction est refusée",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpoint\",\r\n    \"Name\": \"Transactions signées\",\r\n    \"Description\": \"Signature des transactions\",\r\n    \"EntityTypeName\": \"Transaction\",\r\n    \"Action\": \"20\",\r\n    \"TransactionStatusTarget\": \"7\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Webhooks",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Webhooks"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": null,
+							"cookie": [],
+							"responseTime": null,
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Etre notifié lorsque le contenu d'un classeur est modifié",
+					"id": "dd88d484-697f-4a1f-b87c-28b73deebbc8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpointFolderGED\",\r\n    \"Name\": \"Modification contenu classeur\",\r\n    \"Description\": \"Synchronisation Classeurs Docage avec Dossier GED\",\r\n    \"EntityTypeName\": \"Box\",\r\n    \"Action\": \"12\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Webhook",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Webhook"
+							]
+						},
+						"description": "Pour être notifié lorsqu'une entité est ajouté ou supprimée d'un classeur il faut utiliser les évènements dédiés aux classseurs :\n\n| Action| Evènement|\n|:---:|-------------|\n| 10 | Suppression d'un objet dans un classeur |\n| 11 | Ajout d'un objet dans un classeur |\n| 12 | Ajout ou suppression d'un objet dans un classeur |"
+					},
+					"response": [
+						{
+							"id": "fc8a468d-2c92-4129-829f-3b1637712561",
+							"name": "Etre notifié lorsqu'une entité est supprimée d'un classeur",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpointFolderGED\",\r\n    \"Name\": \"Suppression objet classeur\",\r\n    \"Description\": \"Synchronisation Classeurs Docage avec Dossier GED\",\r\n    \"EntityTypeName\": \"Box\",\r\n    \"Action\": \"10\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Webhook",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Webhook"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": null,
+							"cookie": [],
+							"responseTime": null,
+							"body": null
+						},
+						{
+							"id": "03837044-49ed-4e7e-ba39-c9b07d3f7d90",
+							"name": "Etre notifié lorsqu'une entité est ajoutée dans un classeur Copy",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Url\": \"https://www.clientheureux.com/endpointFolderGED\",\r\n    \"Name\": \"Ajout objet dans un classeur\",\r\n    \"Description\": \"Synchronisation Classeurs Docage avec Dossier GED\",\r\n    \"EntityTypeName\": \"Box\",\r\n    \"Action\": \"11\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Webhook",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Webhook"
+									]
+								}
+							},
+							"_postman_previewlanguage": "Text",
+							"header": null,
+							"cookie": [],
+							"responseTime": null,
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Supprimer un Webhook par son Id",
+					"id": "8c246105-a7e6-4c01-81fd-9672d397c1b0",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Webhooks/{{$guid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Webhooks",
+								"{{$guid}}"
+							]
+						},
+						"description": "Supprime un Webhook en spécifiant son Id dans la requête."
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer plusieurs Webhooks par leur Url",
+					"id": "ea27e926-c556-4ac7-a425-3a8eeb5ce0de",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Webhooks/ByUrl/EncodedUrl",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Webhooks",
+								"ByUrl",
+								"EncodedUrl"
+							]
+						},
+						"description": "Supprime tous les Webhooks dont l'Url est identique à celle spécifié dans la requête. Utile si vous avez des webhooks qui pointaient vers une Url qui n'existe plus."
+					},
+					"response": []
+				}
+			],
+			"id": "92845419-2ab5-4e65-a0c5-49d5b0b54ee9",
+			"description": "Un Webhook vous permet d'être notifié en temps réel d'un évènement Docage en spécifiant une URL et l'évènement à notifier.\n\nUne fois le Webhook créé une requête POST sera envoyée à l'URL spécifiée chaque fois que l'évènement se produit dans le périmètre spécifié.\n\nLe périmètre du Webhook peut concerner :\n- un type d'objet (par exemple tous les contacts)\n- un modèle d'objet et tous les objets créés à partir de cet objet (par exemple un modèle de transactions et toutes les transactions créées à partir de ce modèle)\n- un objet précis"
+		},
+		{
+			"name": "Redirections",
+			"item": [],
+			"id": "541ee2b5-3286-4fc1-bdc7-2f1780fc1292",
+			"description": "Les redirections vous permettent de rediriger l'utilisateur vers l'URL de votre choix après une action de sa part.\nIl y a 3 redirections possibles dans le flux d'une transaction :\n- La redirection après remplissage d'un formulaire : FormResultRedirectUrl\n- La redirection après validation : ValidationResultRedirectUrl (à venir)\n- La redirection après signature d'une transaction : SignResultRedirectUrl\n\nLes redirections sont paramétrables au niveau de la transaction (ex : Transaction.SignResultRedirectUrl) et/ou au niveau des membres de la transaction (ex : TransactionMember.FormResultRedirectUrl).\n\nSi les redirections sont paramétrées à la fois pour une transaction et pour un membre, c'est la redirection du membre qui primera.\n\nEn supplément de tous les champs dynamiques d'une transaction que vous pouvez insérer dans votre redirection (ex : {{Transaction_Name}}, deux champs dynamiques spécifiques aux redirections sont disponibles :\n- {{TransactionMember_Id}} : vous permet de savoir quel membre est redirigé grâce à son Id\n- {{TransactionMember_Status}} : vous permet de connaître le statut du membre (Refused ou Signed).\n\nSi vous générez vos transactions à partir d'un modèle de transaction, vous pouvez paramétrer vos redirections directement dans l'interface dans l'onglet \"Avancé\" de votre modèle."
+		},
+		{
+			"name": "Marque blanche",
+			"item": [],
+			"id": "c85a9dcc-89e0-49b1-9bc0-3b1255ed0bf6",
+			"description": "Pour intégrer Docage en marque blanche dans votre site ou application, voici les étapes à suivre :\n\n#### Créer une organisation au nom de votre société.\n\n#### Choisissez une stratégie pour la gestion de vos clients :\n* **Un seul compte utilisateur pour votre application** et toutes les requêtes seront faites avec ce compte.\n* **Un compte utilisateur par client** (société) vous permettant d'utiliser les droits et toutes les fonctions propres aux utilisateurs (comme le remplacement automatique du créateur d'une transaction par exemple).\n* **Une organisation par client** (société) avec chacune son/ses utilisateurs. Vous bénéficiez ainsi d'une parfaite étanchéité des donnés entre vos clients en limitant les risques d'exposer les mauvaises données à un utilisateur de votre application.\nDans ce dernier mode il faut demander à devenir \"Intégrateur\" pour que vous puissiez gérer (avoir des droits) sur vos organisations clients et les facturer directement (au tarif que vous définissez dans Docage pour chaque client). De même ils peuvent utiliser directement votre réserve de crédits ou passer par le système de commandes (onglet Gestion de votre organization et/ou celle de vos clients).\n\n#### Configurez les comptes emails (Mailbox) de votre/vos organisation(s)\nSoit via l'interface (Onglet Comptes Emails d'une organisation) ou l'API pour que les emails soient envoyés à partir de votre domaine. Notez qu'un même compte email peut être assigné à plusieurs utilisateurs et/ou organisations.\n\n#### Dans votre application enregistrez les identifiants de votre/vos utilisateur(s) (email/clé API).\n\n#### Configurez vos webhooks (facultatif)\nSi vous souhaitez mettre à jour en temps réel le statut de la transaction et/ou des membres.\n\n#### Générez votre transaction via l'API et enregistrez les Ids de la transaction et des membres. \nEn configurant correctement les propriétés suivantes :\n- **Les redirections** (en y insérant des champs dynamiques) pour qu'elles redirigent vers votre site/application.\n- **Les emails d'invitation** pour que les liens pointent vers votre page qui intègre l'iframe Docage (voir ci-dessous).\n\n\n#### Pour faire signer un membre dans votre interface :\nIntégrez dans une iframe la page suivante : https://app.docage.com/transactions/Sign?transactionMemberId=xxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx, c'est vers cette page qu'il faudra que vos liens dans vos emails pointent."
+		},
+		{
+			"name": "Champs personnalisés",
+			"item": [
+				{
+					"name": "Créer une entité avec ses champs personnalisés",
+					"id": "a446ecb8-9896-47b1-8b3e-b914542fdfd8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Email\": \"a.einstein@example.com\",\r\n    \"FirstName\": \"Albert\",\r\n    \"LastName\": \"Einstein\",\r\n    \"Address1\": \"42 rue de l'espace\",\r\n    \"Address2\": \"\",\r\n    \"City\": \"Lyon\",\r\n    \"State\": \"\",\r\n    \"Mobile\": \"+337XXXXXXXX\",\r\n    \"Phone\": \"+337XXXXXXXX\",\r\n    \"ZipCode\": \"69000\",\r\n    \"Country\": \"France\",\r\n    \"Notes\": \"\",\r\n    \"Company\": \"Docage\",\r\n    \"Gender\": 1,\r\n    \"Civility\": \"\",\r\n    \"CustomFieldsUserData\": [\r\n        {\r\n            \"Name\": \"NumeroSEPA\",\r\n            \"UserData\": [\"SEPA40201\"]\r\n        },\r\n        {\r\n            \"Name\": \"ServicesChoisis\",\r\n            \"UserData\": [\"service1\", \"service3\"]\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{EntityType}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{EntityType}}"
+							]
+						},
+						"description": "Prenons la création d'un contact, où l'entité Contact possède 3 champs personnalisés : deux champs de type texte NumeroSEPA et NumeroClient, et un champ de type cases à cocher à choix multiples ServicesChoisis.  \nOn renseigne la collection CustomFieldsUserData dans notre objet pour ajouter des valeurs à nos champs personnalisés.\n\nDans cet exemple, on renseigne une valeur pour NumeroSEPA et plusieurs valeurs pour ServicesChoisis, on décide de ne pas donner de valeur à NumeroClient."
+					},
+					"response": []
+				},
+				{
+					"name": "Modifier les champs personnalisés d'une entité",
+					"id": "40d3deba-fae3-4d59-8e81-d0cc6de47bd4",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"FirstName\": \"Tintin\",\r\n    \"Mobile\": \"+33XXXXXXXXX\",\r\n    \"CustomFieldsUserData\": [\r\n        {\r\n            \"Name\": \"NumeroSEPA\",\r\n            \"UserData\": [\"SEPA40202\"]\r\n        },\r\n        {\r\n            \"Name\": \"ServicesChoisis\",\r\n            \"UserData\": [\"service2\", \"service3\"]\r\n        },\r\n        {\r\n            \"Name\": \"NumeroClient\",\r\n            \"UserData\": [\"CL420022\"]\r\n        }\r\n    ]\r\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/{{EntityType}}/a289514f-1adc-4300-a305-608b983edd49",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"{{EntityType}}",
+								"a289514f-1adc-4300-a305-608b983edd49"
+							]
+						},
+						"description": "Reprenons notre contact précédemment créé.  \nDe la même manière que pour la créatio, on renseigne la collection CustomFieldsUserData dans notre objet pour ajouter des valeurs à nos champs personnalisés.\n\nDans cet exemple, on modifie la valeur de NumeroSEPA et ServicesChoisis, et on donne une valeur à NumeroClient."
+					},
+					"response": []
+				},
+				{
+					"name": "Créer une transaction en renseignant ses champs personnalisés",
+					"id": "68b8af8b-5b6e-4959-a9f4-69567d83e0f5",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "TemplateId",
+									"value": "b951514f-1adc-4300-a305-608b983edd49",
+									"type": "text"
+								},
+								{
+									"key": "Transaction",
+									"value": "{\n    \"Name\": \"Contrat avec client\",\n    \"IsTest\": \"true\", \n    \"NumeroContrat\": \"C20810\",\n    \"CasesACocher\": [\"option-1\",\"option-3\"]\n}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Transactions/CreateFullTransaction",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Transactions",
+								"CreateFullTransaction"
+							]
+						},
+						"description": "On souhaite renseigner les champs personnalisés NumeroContrat et CasesACocher. Pour cela, dans le FormData, on ajoute les champs NumeroContrat et CasesACocher et leur valeur aux autres champs renseignés à la clé Transaction."
+					},
+					"response": []
+				}
+			],
+			"id": "761319e6-9fff-4b84-9821-98d92a4dd067",
+			"description": "Les champs personnalisés vous permettent d'ajouter des nouveaux champs à vos entités, vous permettant de répondre à vos besoins métiers spécifiques.  \nPour plus de détails, nous vous invitons à regarder notre vidéo sur la [personnalisation des fiches](https://www.docage.com/videos) afin de vous familiariser avec le concept.\n\nPour renseigner vos champs personnalisés lors de la création d'une entité, il existe deux méthodes, l'une pour toutes les routes POST ou PUT et une spécifique à la route CreateFullTransaction."
+		},
+		{
+			"name": "Classeurs",
+			"item": [
+				{
+					"name": "Requêtes spécifiques aux classeurs",
+					"item": [
+						{
+							"name": "Ajouter des entités à un classeur",
+							"id": "1caaf41c-4ca0-4ddf-ba3f-a9720e4cd80f",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\"63c771ca-fd61-4f6b-90dc-bc910e5f925b\", \"9d3b0e17-bddb-40de-b9f7-944a613198d4\", \"c04a9e7e-6cfe-4d87-9250-39a238aa6146\"]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Boxes/AddEntities/83c533f8-c98a-45fb-b725-7980b50ae424/Contact",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Boxes",
+										"AddEntities",
+										"83c533f8-c98a-45fb-b725-7980b50ae424",
+										"Contact"
+									]
+								},
+								"description": "Pour ajouter des entités à un classeur. Il vous suffit d'appeler la route **Boxes/AddEntities**, en renseignant en premier paramètre de votre requête l'Id de votre classeur, puis en second paramètre le type d'entité que vous souhaitez ajouter au classeur (dans notre exemple Contact).\n\nIl vous suffit ensuite dans le corps de votre requête de préciser la liste des Ids du type d'entité sélectionné. Dans l'exemple suivant, nous ajoutons 3 contacts à un classeur."
+							},
+							"response": []
+						},
+						{
+							"name": "Supprimer des entités d'un classeur",
+							"id": "1e1efb4e-3c85-42b9-9ef5-4431d4f8e732",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\"9d3b0e17-bddb-40de-b9f7-944a613198d4\", \"63c771ca-fd61-4f6b-90dc-bc910e5f925b\"]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Boxes/RemoveEntities/83c533f8-c98a-45fb-b725-7980b50ae424/Contact",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Boxes",
+										"RemoveEntities",
+										"83c533f8-c98a-45fb-b725-7980b50ae424",
+										"Contact"
+									]
+								},
+								"description": "De la même manière que pour ajouter des entités à un classeur, pour supprimer une ou plusieurs entités d'un classeur, il vous suffit d'appeler la route **Boxes/RemoveEntities** en renseignant en premier paramètre de votre requête l'Id de votre classeur, puis en second paramètre le type d'entité que vous souhaitez supprimer du classeur (dans notre exemple Contact).\n\nIl vous suffit ensuite dans le corps de votre requête de préciser la liste des Ids du type d'entité sélectionné. Dans l'exemple suivant, on supprime deux contacts d'un classeur."
+							},
+							"response": []
+						},
+						{
+							"name": "Suppression d'un/plusieurs classeurs avec leur contenu",
+							"id": "6aac2296-2c03-4a78-9de8-5181cbab4d0e",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\"83c533f8-c98a-45fb-b725-7980b50ae424\", \"a4677521-b806-4c11-a8ed-195588b671b9\"]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Boxes/BatchDeleteWithContent",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Boxes",
+										"BatchDeleteWithContent"
+									]
+								},
+								"description": "**ATTENTION : Cette route sert à effectuer une action sensible, qui pourrait entraîner une suppression involontaire d'un ou de plusieurs utilisateurs. Veuillez utiliser cette route avec précaution.**\n\nLa route **Boxes/BatchDeleteWithContent** sert à supprimer un ou plusieurs classeurs. Ce qui diffère par rapport au BatchDelete classique, c'est que toutes les entités contenues dans ces classeurs sont également supprimées de Docage.\n\nIl vous suffit d'ajouter dans le corps de votre requête un tableau de tous les Ids des classeurs que vous souhaitez supprimer. Dans l'exemple suivant, on supprime deux classeurs ainsi que toutes les entités contenues dedans."
+							},
+							"response": []
+						}
+					],
+					"id": "12d148d0-7c0d-48a4-bc4b-41afe4a23a42"
+				},
+				{
+					"name": "Liaisons lors de la création d'une entité",
+					"item": [
+						{
+							"name": "Ajouter une entité à un ou plusieurs classeurs à la création",
+							"id": "4a16900d-aa48-40ba-9b9f-2bd99a47e820",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"Email\": \"a.einstein@example.com\",\r\n    \"FirstName\": \"Albert\",\r\n    \"LastName\": \"Einstein\",\r\n    \"Address1\": \"42 rue de l'espace\",\r\n    \"City\": \"Lyon\",\r\n    \"ZipCode\": \"69000\",\r\n    \"Country\": \"France\",\r\n    \"Phone\": \"+33XXXXXXXXX\",\r\n    \"Mobile\": \"+33XXXXXXXXX\",\r\n    \"Company\": \"Docage\",\r\n    \"Gender\": 1,\r\n    \"AddToBoxIds\": [\"a4677521-b806-4c11-a8ed-195588b671b9\", \"83c533f8-c98a-45fb-b725-7980b50ae424\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{EntityType}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{EntityType}}"
+									]
+								},
+								"description": "Pour ajouter l'entité que vous souhaitez créer à un ou plusieurs classeurs, il vous suffit de renseigner un tableau d'Id de vos classeurs dans la propriété *AddToBoxIds* de votre entité lors de sa création.\n\n**ATTENTION : La propriété** ***BoxIds*** **d'une entité est utilisée uniquement pour la lecture, ajouter un Id de classeur à cette propriété n'ajoutera pas l'entité au classeur renseigné.**"
+							},
+							"response": []
+						}
+					],
+					"id": "ea4b353e-96a5-48f9-98cc-c02b324d7262"
+				},
+				{
+					"name": "Modification des liaisons lors de la modification d'une entité",
+					"item": [
+						{
+							"name": "Ajouter une entité à un ou plusieurs classeurs à la modification",
+							"id": "b6fd4dd5-1d6a-4520-8876-67caf8838f02",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"Email\": \"johndoe@example.com\",\r\n  \"FirstName\": \"Johnny\",\r\n  \"Address1\": \"45 rue de l'espace\",\r\n  \"City\": \"Paris\",\r\n  \"ZipCode\": \"75000\",\r\n  \"AddToBoxIds\": [\"a4677521-b806-4c11-a8ed-195588b671b9\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Contacts/63c771ca-fd61-4f6b-90dc-bc910e5f925b",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Contacts",
+										"63c771ca-fd61-4f6b-90dc-bc910e5f925b"
+									]
+								},
+								"description": "De la même manière qu'à la création d'une entité, vous pouvez ajouter l'entité à un ou plusieurs classeurs lors de sa modification en renseignant un tableau d'Id de classeurs comme valeur de la propriété *AddToBoxIds*.\n\n**ATTENTION : La propriété** ***BoxIds*** **d'une entité est utilisée uniquement pour la lecture, ajouter un Id de classeur à cette propriété n'ajoutera pas l'entité au classeur renseigné.**"
+							},
+							"response": []
+						},
+						{
+							"name": "Supprimer une entité d'un ou plusieurs classeurs à la modification",
+							"id": "9fbd1c05-4bd1-41e0-8b2c-51999b28998b",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"Email\": \"johndoe@example.com\",\r\n  \"FirstName\": \"Johnny\",\r\n  \"Address1\": \"45 rue de l'espace\",\r\n  \"City\": \"Paris\",\r\n  \"ZipCode\": \"75000\",\r\n  \"RemoveFromBoxIds\": [\"a4677521-b806-4c11-a8ed-195588b671b9\"]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/Contacts/63c771ca-fd61-4f6b-90dc-bc910e5f925b",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"Contacts",
+										"63c771ca-fd61-4f6b-90dc-bc910e5f925b"
+									]
+								},
+								"description": "Pour supprimer une entité d'un ou de plusieurs classeurs lors de sa modification, il vous suffit de renseigner un tableau d'Id de vos classeurs dans la propriété *RemoveFromBoxIds* de votre entité.\n\n**ATTENTION : La propriété** ***BoxIds*** **d'une entité est utilisée uniquement pour la lecture, retirer un Id de classeur de cette propriété ne supprimera pas la liaison entre l'entité et le classeur.**"
+							},
+							"response": []
+						}
+					],
+					"id": "1339eee5-1d4e-498d-bfb1-efa988db7466"
+				},
+				{
+					"name": "Modification des liaisons entre une entité et les classeurs",
+					"item": [
+						{
+							"name": "Ajouter une entité à un/des classeurs",
+							"id": "52579647-dce9-44d8-988d-690180fb3d41",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\"a4677521-b806-4c11-a8ed-195588b671b9\", \"83c533f8-c98a-45fb-b725-7980b50ae424\"]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{EntityType}}/AddToBoxes/63c771ca-fd61-4f6b-90dc-bc910e5f925b",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{EntityType}}",
+										"AddToBoxes",
+										"63c771ca-fd61-4f6b-90dc-bc910e5f925b"
+									]
+								},
+								"description": "Pour ajouter un ou plusieurs classeurs à une entité, il vous suffit d'utiliser la route AddToBoxes de cette entité, avec comme paramètre l'Id de votre entité. Il vous faut renseigner un tableau d'Id de classeurs dans le corps de votre requête.\n\nDans l'exemple suivant, nous ajoutons le contact qui à l'Id 63c771ca-fd61-4f6b-90dc-bc910e5f925b à deux classeurs."
+							},
+							"response": []
+						},
+						{
+							"name": "Supprimer une entité d'un/de plusieurs classeurs",
+							"id": "4df26cbb-e418-4dbb-8d8f-4249ce0a3e88",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\"a4677521-b806-4c11-a8ed-195588b671b9\", \"83c533f8-c98a-45fb-b725-7980b50ae424\"]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/{{EntityType}}/RemoveFromBoxes/63c771ca-fd61-4f6b-90dc-bc910e5f925b",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"{{EntityType}}",
+										"RemoveFromBoxes",
+										"63c771ca-fd61-4f6b-90dc-bc910e5f925b"
+									]
+								},
+								"description": "Pour supprimer votre entité d'un ou de plusieurs classeurs, il vous suffit d'utiliser la route RemoveFromBoxes de cette entité, avec comme paramètre l'Id de votre entité. Il vous faut renseigner un tableau d'Id de classeurs dans le corps de votre requête.\n\nDans l'exemple suivant, nous supprimons le contact qui à l'Id 63c771ca-fd61-4f6b-90dc-bc910e5f925b de deux classeurs."
+							},
+							"response": []
+						}
+					],
+					"id": "bef8ed45-fbf4-4afd-a29f-2de6b2843cd7"
+				},
+				{
+					"name": "Créer un classeur",
+					"id": "902ce18f-ce65-44ff-be92-660d2437fa01",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Contrats\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Boxes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Boxes"
+							]
+						},
+						"description": "Crée un nouveau classeur en envoyant son contenu au format JSON. Si la création du classeur s'effectue avec succès, son Id est renvoyé dans la réponse de l'API."
+					},
+					"response": []
+				},
+				{
+					"name": "Modifier un classeur",
+					"id": "cd363d0b-2a1d-4fe7-988a-a7f170b0a8e8",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Factures\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Boxes/{{$guid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Boxes",
+								"{{$guid}}"
+							]
+						},
+						"description": "Met à jour les propriétés d'un classeur existant en envoyant les propriétés modifiées au format JSON."
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer un classeur",
+					"id": "64aaddc0-0649-4fa1-967a-7cdcac1daa76",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/Boxes/{{$guid}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Boxes",
+								"{{$guid}}"
+							]
+						},
+						"description": "Supprime un classeur en spécifiant son **Id** dans une requête **DELETE**."
+					},
+					"response": []
+				},
+				{
+					"name": "Supprimer plusieurs classeurs",
+					"id": "c40fd71e-a48f-4509-8308-77cc883a89a6",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    \"9d3b0e17-bddb-40de-b9f7-944a613198d4\",\r\n    \"63c771ca-fd61-4f6b-90dc-bc910e5f925b\"\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/Boxes/BatchDelete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"Boxes",
+								"BatchDelete"
+							]
+						},
+						"description": "Supprime un ou plusieurs classeurs en envoyant un **tableau d'Id** dans le **corps** de la requête au format **JSON**."
+					},
+					"response": []
+				}
+			],
+			"id": "ed4f4bd6-e1c6-4e46-9d1c-eb97b311713c",
+			"description": "Un classeur est un objet permettant de regrouper des objets Docage. Un même classeur peut ainsi regrouper :\n\n*   des utilisateurs\n*   des contacts\n*   des transactions\n*   des documents\n*   des formulaires\n    \n\nDans le cadre d'une API les classeurs permettent en général de segmenter les transactions et/ou les contacts créés à partir d'un même compte utilisateur représentant votre application.\n\nUne entité peut être liée à plusieurs classeurs.\n\n**Attention : les droits sur un classeur ne s'appliquent pas aux objets du classeur.**\n\nUne [vidéo de présentation](https://youtu.be/xQavpe8i1jE) des classeurs vous permettra de vous familiariser avec le concept."
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "cd95f43d-1c62-47cd-866c-04a96eb0efba",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "astridgauthier3@gmail.com",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "47411c6e-e896-4cfa-a5a9-863bddf1263c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "ff67dd03-a4f6-4ed8-a0d3-db1bf9104b5c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "1acca292-4b5f-4049-ad1c-fdbe25349e06",
+			"key": "baseUrl",
+			"value": "https://api.docage.com"
+		},
+		{
+			"id": "1cb11e5c-b1ae-4a12-b1d4-7913ffec2245",
+			"key": "EntityType",
+			"value": "Contacts"
+		},
+		{
+			"id": "186d4cc6-9f31-4e89-a0e2-5d52f61d151e",
+			"key": "UserName",
+			"value": ""
+		},
+		{
+			"id": "93b1e373-ee45-430e-a066-f985c3bb124a",
+			"key": "APIKey",
+			"value": ""
+		}
+	]
+}
